@@ -1,0 +1,100 @@
+$pickerBorderWidth: 2px;
+$pickerBoxShadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+
+$hsvPickerDiameter: 28px;
+$huePickerWidth: 18px;
+$huePickerHeight: 28px;
+
+.react_color_picker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  .saturation_value {
+    position: relative;
+    flex: 1 1 auto;
+    overflow: hidden;
+
+    // Need to account for hue_slider_picker overflow
+    margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-bottom: 10px;
+
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000000 100%), linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+    background-color: #ffffff;
+
+    .saturation_value_picker {
+      position: absolute;
+      top: 0;
+      left: 0;
+    
+      width: $hsvPickerDiameter;
+      height: $hsvPickerDiameter;
+      box-sizing: border-box;
+    
+      border: $pickerBorderWidth solid #ffffff;
+      box-shadow: $pickerBoxShadow;
+    
+      border-radius: $hsvPickerDiameter / 2;
+    
+      cursor: pointer;
+
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .hue_slider {
+    position: relative;
+    height: $huePickerHeight;
+    // Need to account for hue_slider_picker overflow
+    margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-bottom: $pickerBorderWidth; // Overflow = hue_slider_picker border width
+    
+    background-image: linear-gradient(to left, #ff0000 0%,#ff00ff 16.66%,#0000ff 33.33%,#00ffff 50%,#00ff00 66.66%,#ffff00 80.33%, #ff0000 100%);
+
+    .hue_slider_picker {
+      position: absolute;
+      top: -$pickerBorderWidth; // Overflow = hue_slider_picker border width
+      left: 0;
+
+      width: $huePickerWidth;
+      height: 100%;
+
+      border: $pickerBorderWidth solid #ffffff;
+      box-shadow: $pickerBoxShadow;
+      background-color: #ff0000;
+
+      border-radius: ($huePickerWidth / 2) + $pickerBorderWidth;
+
+      cursor: pointer;
+
+      transform: translateX(-50%);
+    }
+  }
+
+  .details {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+
+    // Need to account for hue_slider_picker overflow
+    margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+
+    .swatch {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+
+      border: 1px solid #ccc;
+    }
+
+    .hex_value {
+      width: 60px;
+      margin-left: 5px;
+    }
+  }
+}
