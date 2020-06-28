@@ -18,6 +18,7 @@
   "private": false,
   "scripts": {
     "build": "rollup -c",
+    "prepare": "yarn build",
     "dev": "rollup -c -w",
     "test": "jest",
     "coverage": "jest --coverage"
