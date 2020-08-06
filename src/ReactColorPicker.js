@@ -18,6 +18,8 @@ const ReactColorPicker = ({
   showSwatch,
 
   onChange,
+  onInteractionStart,
+  onInteractionEnd,
 
   ...rest
 }) => {
@@ -28,6 +30,7 @@ const ReactColorPicker = ({
 
   // Used when editing the hex through the input
   const [tempHex, setTempHex] = useState(hex);
+  const [isInteracting, setIsInteracting] = useState(false);
 
   const hsvRef = useRef(hsv);
   const hexRef = useRef(hex);
@@ -112,14 +115,31 @@ const ReactColorPicker = ({
       }
     };
 
-    document.addEventListener('mousedown', updateColor);
+    const onMouseDown = (evt) => {
+      if (isRefTargeted(evt, hueSliderRef) || isRefTargeted(evt, svSliderRef)) {
+        setIsInteracting(true);
+        onInteractionStart();
+        updateColor(evt);
+      }
+    };
+
+    const onMouseUp = () => {
+      if (isInteracting) {
+        setIsInteracting(false);
+        onInteractionEnd();
+      }
+    };
+
+    document.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mousemove', updateColor);
+    document.addEventListener('mouseup', onMouseUp);
 
     return () => {
-      document.removeEventListener('mousedown', updateColor);
+      document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mousemove', updateColor);
+      document.removeEventListener('mouseup', onMouseUp);
     };
-  }, []);
+  }, [isInteracting]);
 
   const {
     hue,
@@ -207,6 +227,8 @@ ReactColorPicker.propTypes = {
   showHex: PropTypes.bool,
 
   onChange: PropTypes.func,
+  onInteractionStart: PropTypes.func,
+  onInteractionEnd: PropTypes.func,
 };
 
 ReactColorPicker.defaultProps = {
@@ -216,6 +238,8 @@ ReactColorPicker.defaultProps = {
   showHex: true,
 
   onChange: () => {},
+  onInteractionStart: () => {},
+  onInteractionEnd: () => {},
 };
 
 export default ReactColorPicker;

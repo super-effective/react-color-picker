@@ -5,9 +5,18 @@ import styles from './App.module.scss';
 
 const App = () => {
   const [color, setColor] = useState('#3cd6bf');
+  const [isInteracting, setIsInteracting] = useState(false);
 
   const onColorChange = (updatedColor) => {
     setColor(updatedColor);
+  };
+
+  const onInteractionStart = () => {
+    setIsInteracting(true);
+  };
+
+  const onInteractionEnd = () => {
+    setIsInteracting(false);
   };
 
   return (
@@ -16,8 +25,18 @@ const App = () => {
         Selected color:
         {color}
       </h1>
+      <p>
+        Is interacting?
+        &nbsp;
+        {isInteracting ? 'Yes' : 'No'}
+      </p>
       <div className={styles.color_picker}>
-        <ReactColorPicker color={color} onChange={onColorChange} />
+        <ReactColorPicker
+          color={color}
+          onChange={onColorChange}
+          onInteractionStart={onInteractionStart}
+          onInteractionEnd={onInteractionEnd}
+        />
       </div>
     </div>
   );

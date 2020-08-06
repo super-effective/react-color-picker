@@ -15,6 +15,72 @@ describe('ReactColorPicker', () => {
     ReactDOM.unmountComponentAtNode(div);
   });
 
+  test('fires interaction start - hue mousedown', () => {
+    // Arrange
+    const onInteractionStart = jest.fn();
+    const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
+    const hueDiv = getByTitle('Hue');
+
+    // Act
+    fireEvent(hueDiv, createEvent.mouseDown(hueDiv, { buttons: 1 }));
+
+    // Assert
+    expect(onInteractionStart).toHaveBeenCalled();
+  });
+
+  test('fires interaction start - saturation/value mousedown', () => {
+    // Arrange
+    const onInteractionStart = jest.fn();
+    const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
+    const svDiv = getByTitle('Saturation and Value');
+
+    // Act
+    fireEvent(svDiv, createEvent.mouseDown(svDiv, { buttons: 1 }));
+
+    // Assert
+    expect(onInteractionStart).toHaveBeenCalled();
+  });
+
+  test('does not fire interaction start - not targeted', () => {
+    // Arrange
+    const onInteractionStart = jest.fn();
+    render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
+
+    // Act
+    fireEvent(document, createEvent.mouseDown(document, { buttons: 1 }));
+
+    // Assert
+    expect(onInteractionStart).not.toHaveBeenCalled();
+  });
+
+  test('fires interaction end - mouseup', () => {
+    // Arrange
+    const onInteractionEnd = jest.fn();
+    const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionEnd={onInteractionEnd} />);
+    const svDiv = getByTitle('Saturation and Value');
+
+    // Act
+    fireEvent(svDiv, createEvent.mouseDown(svDiv, { buttons: 1 }));
+    fireEvent(svDiv, createEvent.mouseUp(svDiv, { buttons: 1 }));
+
+    // Assert
+    expect(onInteractionEnd).toHaveBeenCalled();
+  });
+
+  test('does not fire interaction start - not targeted', () => {
+    // Arrange
+    const onInteractionStart = jest.fn();
+    const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
+    const svDiv = getByTitle('Saturation and Value');
+
+    // Act
+    fireEvent(document, createEvent.mouseDown(document, { buttons: 1 }));
+    fireEvent(svDiv, createEvent.mouseUp(svDiv, { buttons: 1 }));
+
+    // Assert
+    expect(onInteractionStart).not.toHaveBeenCalled();
+  });
+
   test('color updates when setting hue - mousedown', () => {
     // Arrange
     const onChange = jest.fn();
