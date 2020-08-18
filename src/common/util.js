@@ -13,28 +13,6 @@
 
 
 /**
- * Check's if a referenced element is the target or parent of the target of an event
- * @param {Event} target The interaction event
- * @param {Object} ref A ref from a react useRef hook (object with a .current property)
- */
-export function isRefTargeted(evt, ref) {
-  // Missing ref or event/target
-  if (!ref || !ref.current || !evt || !evt.target) {
-    return false;
-  }
-
-  let currentTarget = evt.target;
-  do {
-    if (currentTarget === ref.current) {
-      return true;
-    }
-    currentTarget = currentTarget.parentElement;
-  } while (currentTarget);
-
-  return false;
-}
-
-/**
  * Gets the page relative top/left position of an element
  * @param {Element} element The DOM element to get the page position of
  */

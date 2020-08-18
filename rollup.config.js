@@ -16,11 +16,13 @@ export default {
       file: packageJson.main,
       format: 'cjs',
       sourcemap: true,
+      exports: 'default',
     },
     {
       file: packageJson.module,
       format: 'esm',
       sourcemap: true,
+      exports: 'default',
     },
   ],
 

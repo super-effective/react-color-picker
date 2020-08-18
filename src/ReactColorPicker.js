@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { hsvToHex, hexToHsv, sanitizeHex } from '@super-effective/colorutils';
 
@@ -6,7 +6,6 @@ import {
   getHueFromPosition,
   getPagePosition,
   getSaturationValueFromPosition,
-  isRefTargeted,
 } from 'common/util';
 
 import styles from './ReactColorPicker.module.scss';
@@ -81,65 +80,92 @@ const ReactColorPicker = ({
     }
   }, [color]);
 
+  const updateSaturationValue = useCallback((evt) => {
+    const svPosition = getPagePosition(svSliderRef.current);
+    const x = evt.pageX - svPosition.left;
+    const y = evt.pageY - svPosition.top;
 
-  // Hookup cursor events to update the color selection
-  useEffect(() => {
-    const updateColor = (evt) => {
-      // Update hue if targeted
-      if (isRefTargeted(evt, hueSliderRef) && evt.buttons === 1) {
-        const huePosition = getPagePosition(hueSliderRef.current);
-        const x = evt.pageX - huePosition.left;
+    const updatedSaturationValue = getSaturationValueFromPosition(
+      x,
+      y,
+      svSliderRef.current.clientWidth,
+      svSliderRef.current.clientHeight,
+    );
 
-        const updatedHue = getHueFromPosition(x, hueSliderRef.current.clientWidth);
+    setColorFromHsv({
+      ...hsvRef.current,
+      ...updatedSaturationValue,
+    });
+  }, []);
 
-        setColorFromHsv({ ...hsvRef.current, hue: updatedHue });
-      }
+  const updateHue = useCallback((evt) => {
+    const huePosition = getPagePosition(hueSliderRef.current);
+    const x = evt.pageX - huePosition.left;
 
-      // Update the saturation/value if targeted
-      if (isRefTargeted(evt, svSliderRef) && evt.buttons === 1) {
-        const svPosition = getPagePosition(svSliderRef.current);
-        const x = evt.pageX - svPosition.left;
-        const y = evt.pageY - svPosition.top;
+    const updatedHue = getHueFromPosition(x, hueSliderRef.current.clientWidth);
 
-        const updatedSaturationValue = getSaturationValueFromPosition(
-          x,
-          y,
-          svSliderRef.current.clientWidth,
-          svSliderRef.current.clientHeight,
-        );
+    setColorFromHsv({ ...hsvRef.current, hue: updatedHue });
+  }, []);
 
-        setColorFromHsv({
-          ...hsvRef.current,
-          ...updatedSaturationValue,
-        });
-      }
-    };
+  // Setup pointer events for supported browsers for two reasons:
+  //   1. It allows for pointer capture which allows for continued
+  //      interaction even when the cursor/pointer outside of picker
+  //   2. It allows for unified code across devices (mobile and desktop)
+  const onPointerDown = useCallback((evt) => {
+    evt.target.setPointerCapture(evt.pointerId);
+    onInteractionStart();
+    setIsInteracting(true);
+  }, []);
 
-    const onMouseDown = (evt) => {
-      if (isRefTargeted(evt, hueSliderRef) || isRefTargeted(evt, svSliderRef)) {
-        setIsInteracting(true);
-        onInteractionStart();
-        updateColor(evt);
-      }
-    };
+  const onPointerUp = useCallback((evt) => {
+    evt.target.releasePointerCapture(evt.pointerId);
+    onInteractionEnd();
+    setIsInteracting(false);
+  }, []);
 
-    const onMouseUp = () => {
-      if (isInteracting) {
-        setIsInteracting(false);
-        onInteractionEnd();
-      }
-    };
+  const onSvPointerDown = useCallback((evt) => {
+    onPointerDown(evt);
+    updateSaturationValue(evt);
+  }, []);
 
-    document.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mousemove', updateColor);
-    document.addEventListener('mouseup', onMouseUp);
-
-    return () => {
-      document.removeEventListener('mousedown', onMouseDown);
-      document.removeEventListener('mousemove', updateColor);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
+  const onSvMove = useCallback((evt) => {
+    if (isInteracting) {
+      updateSaturationValue(evt);
+    }
   }, [isInteracting]);
+
+  const onHuePointerDown = useCallback((evt) => {
+    console.log('hue pointer down');
+    onPointerDown(evt);
+    updateHue(evt);
+  }, []);
+
+  const onHueMove = useCallback((evt) => {
+    if (isInteracting) {
+      updateHue(evt);
+    }
+  }, [isInteracting]);
+
+  // Setup mouse and touch events as a fallback
+  const onMouseDown = useCallback(() => {
+    onInteractionStart();
+    setIsInteracting(true);
+  }, []);
+
+  const onMouseUp = useCallback(() => {
+    onInteractionEnd();
+    setIsInteracting(false);
+  }, []);
+
+  const onSvMouseDown = useCallback((evt) => {
+    onMouseDown(evt);
+    updateSaturationValue(evt);
+  }, []);
+
+  const onHueMouseDown = useCallback((evt) => {
+    onMouseDown(evt);
+    updateHue(evt);
+  }, []);
 
   const {
     hue,
@@ -149,6 +175,30 @@ const ReactColorPicker = ({
 
   // Get the hex for the hue slider
   const hueColor = hsvToHex(hue, 1, 1);
+
+  const svInteractionCallbacks = (window.PointerEvent)
+    ? {
+      onPointerDown: onSvPointerDown,
+      onPointerMove: onSvMove,
+      onPointerUp,
+    }
+    : {
+      onMouseDown: onSvMouseDown,
+      onMouseMove: onSvMove,
+      onMouseUp,
+    };
+
+  const hueInteractionCallbacks = (window.PointerEvent)
+    ? {
+      onPointerDown: onHuePointerDown,
+      onPointerMove: onHueMove,
+      onPointerUp,
+    }
+    : {
+      onMouseDown: onHueMouseDown,
+      onMouseMove: onHueMove,
+      onMouseUp,
+    };
 
   return (
     <div
@@ -162,6 +212,8 @@ const ReactColorPicker = ({
           }}
           ref={svSliderRef}
           title="Saturation and Value"
+
+          {...svInteractionCallbacks}
         >
           <div
             className={styles.saturation_value_picker}
@@ -173,7 +225,13 @@ const ReactColorPicker = ({
           />
         </div>
 
-        <div className={styles.hue_slider} ref={hueSliderRef} title="Hue" >
+        <div
+          className={styles.hue_slider}
+          ref={hueSliderRef}
+          title="Hue"
+
+          {...hueInteractionCallbacks}
+        >
           <div
             className={styles.hue_slider_picker}
             style={{
