@@ -35,6 +35,8 @@ Render the component in your code:
 |`showSwatch`|`bool`|Whether the selected color swatch should be displayed below the picker|
 |`showHex`|`bool`|Whether the hex value input should be displayed below the picker|
 |`onChange`|`func`|The callback function to be called when the color value changes|
+|`onInteractionStart`|`func`|The callback function to be called when interaction starts with one of the value selectors|
+|`onInteractionEnd`|`func`|The callback function to be called when interaction ends with one of the value selectors|
 
 ### Example
 See the [included example](example/) for reference
@@ -46,9 +48,18 @@ import styles from './App.module.scss';
 
 const App = () => {
   const [color, setColor] = useState('#3cd6bf');
+  const [isInteracting, setIsInteracting] = useState(false);
 
   const onColorChange = (updatedColor) => {
     setColor(updatedColor);
+  };
+
+  const onInteractionStart = () => {
+    setIsInteracting(true);
+  };
+
+  const onInteractionEnd = () => {
+    setIsInteracting(false);
   };
 
   return (
@@ -57,8 +68,18 @@ const App = () => {
         Selected color:
         {color}
       </h1>
+      <p>
+        Is interacting?
+        &nbsp;
+        {isInteracting ? 'Yes' : 'No'}
+      </p>
       <div className={styles.color_picker}>
-        <ReactColorPicker color={color} onChange={onColorChange} />
+        <ReactColorPicker
+          color={color}
+          onChange={onColorChange}
+          onInteractionStart={onInteractionStart}
+          onInteractionEnd={onInteractionEnd}
+        />
       </div>
     </div>
   );

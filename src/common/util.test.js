@@ -1,5 +1,4 @@
 import {
-  isRefTargeted,
   getPagePosition,
   getCombinedClassNames,
   getHueFromPosition,
@@ -28,58 +27,6 @@ const secondChildElement = {
   parentElement: firstChildElement,
 };
 
-/**
- * isRefTargeted
- */
-describe('isRefTargeted', () => {
-  test('isRefTargeted', () => {
-    // Arrange
-    const testRef = { current: parentElement };
-    const testEvt = { target: parentElement };
-
-    // Act
-    const isTargeted = isRefTargeted(testEvt, testRef);
-
-    // Assert
-    expect(isTargeted).toEqual(true);
-  });
-
-  test('isRefTargeted - deep child targeted', () => {
-    // Arrange
-    const testRef = { current: parentElement };
-    const testEvt = { target: secondChildElement };
-
-    // Act
-    const isTargeted = isRefTargeted(testEvt, testRef);
-
-    // Assert
-    expect(isTargeted).toEqual(true);
-  });
-
-  test('isRefTargeted - not targeted', () => {
-    // Arrange
-    const testRef = { current: secondChildElement };
-    const testEvt = { target: parentElement };
-
-    // Act
-    const isTargeted = isRefTargeted(testEvt, testRef);
-
-    // Assert
-    expect(isTargeted).toEqual(false);
-  });
-
-  test('isRefTargeted - unset ref', () => {
-    // Arrange
-    const testRef = { current: null };
-    const testEvt = { target: parentElement };
-
-    // Act
-    const isTargeted = isRefTargeted(testEvt, testRef);
-
-    // Assert
-    expect(isTargeted).toEqual(false);
-  });
-});
 
 /**
  * getPagePosition
