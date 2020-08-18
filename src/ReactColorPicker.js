@@ -135,7 +135,6 @@ const ReactColorPicker = ({
   }, [isInteracting]);
 
   const onHuePointerDown = useCallback((evt) => {
-    console.log('hue pointer down');
     onPointerDown(evt);
     updateHue(evt);
   }, []);
