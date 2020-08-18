@@ -74,7 +74,7 @@ const ReactColorPicker = ({
 
   // Update color when the passed value changes
   useEffect(() => {
-    if (color !== hexRef.current) {
+    if (color !== hexRef.current && !isInteracting) {
       const sanitizedHex = sanitizeHex(color || '#000000');
       setColorFromHex(sanitizedHex);
     }
