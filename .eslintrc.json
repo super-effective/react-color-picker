@@ -46,7 +46,7 @@
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-use-before-define": "off",
     "object-curly-newline": ["error", { "ImportDeclaration": { "minProperties": 6, "consistent": true } }],
-
+    "react/jsx-indent": ["error", 2],
     "react/display-name": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/jsx-props-no-spreading": "off",

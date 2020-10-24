@@ -205,74 +205,74 @@ const ReactColorPicker = ({
       {...rest}
     >
       <div
-          className={styles.saturation_value}
+        className={styles.saturation_value}
+        style={{
+          backgroundColor: hueColor,
+        }}
+        ref={svSliderRef}
+        title="Saturation and Value"
+
+        {...svInteractionCallbacks}
+      >
+        <div
+          className={styles.saturation_value_picker}
           style={{
+            left: `${saturation * 100}%`,
+            top: `${(1 - value) * 100}%`,
+            backgroundColor: hex,
+          }}
+        />
+      </div>
+
+      <div
+        className={styles.hue_slider}
+        ref={hueSliderRef}
+        title="Hue"
+
+        {...hueInteractionCallbacks}
+      >
+        <div
+          className={styles.hue_slider_picker}
+          style={{
+            left: `${(hue / 360) * 100}%`,
             backgroundColor: hueColor,
           }}
-          ref={svSliderRef}
-          title="Saturation and Value"
+        />
+      </div>
 
-          {...svInteractionCallbacks}
-        >
-          <div
-            className={styles.saturation_value_picker}
-            style={{
-              left: `${saturation * 100}%`,
-              top: `${(1 - value) * 100}%`,
-              backgroundColor: hex,
-            }}
-          />
-        </div>
-
-        <div
-          className={styles.hue_slider}
-          ref={hueSliderRef}
-          title="Hue"
-
-          {...hueInteractionCallbacks}
-        >
-          <div
-            className={styles.hue_slider_picker}
-            style={{
-              left: `${(hue / 360) * 100}%`,
-              backgroundColor: hueColor,
-            }}
-          />
-        </div>
-
-        {(showHex || showSwatch) && (
-          <div className={styles.details}>
-            {showSwatch && (
-              <div
-                className={styles.swatch}
-                style={{
-                  backgroundColor: hex,
+      {(showHex || showSwatch) && (
+        <div className={styles.details}>
+          {showSwatch && (
+            <div
+              className={styles.swatch}
+              style={{
+                backgroundColor: hex,
+              }}
+              title="Swatch"
+            />
+          )}
+          {showHex && (
+            <label>
+              <span>Hex:</span>
+              <input
+                className={styles.hex_value}
+                value={tempHex}
+                onChange={(evt) => setTempHex(evt.target.value)}
+                onBlur={(evt) => onHexChange(evt.target.value)}
+                onKeyDown={(evt) => {
+                  if (evt.key === 'Enter') {
+                    onHexChange(evt.target.value);
+                  } else if (evt.key === 'Esc' || evt.key === 'Escape') {
+                    // eslint-disable-next-line no-param-reassign
+                    evt.target.value = hexRef.current;
+                    evt.target.blur();
+                  }
                 }}
-                title="Swatch"
               />
-            )}
-            {showHex && (
-              <label>
-                <span>Hex:</span>
-                <input
-                  className={styles.hex_value}
-                  value={tempHex}
-                  onChange={(evt) => setTempHex(evt.target.value)}
-                  onBlur={(evt) => onHexChange(evt.target.value)}
-                  onKeyDown={(evt) => {
-                    if (evt.key === 'Enter') {
-                      onHexChange(evt.target.value);
-                    } else if (evt.key === 'Esc' || evt.key === 'Escape') {
-                      // eslint-disable-next-line no-param-reassign
-                      evt.target.value = hexRef.current;
-                      evt.target.blur();
-                    }
-                  }}
-                />
-              </label>
-            )}
-          </div>
-        )}
+            </label>
+          )}
+        </div>
+      )}
     </div>
   );
 };
