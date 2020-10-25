@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { hsvToHex } from '@super-effective/colorutils';
 import React, { useCallback, useRef, useState } from 'react';
@@ -89,7 +90,10 @@ const SaturationValueSelector = ({
 
   return (
     <div
-      className={`${styles.saturation_value_selector}${className ? ` ${className}` : ''}`}
+      className={classNames(
+        styles.saturation_value_selector,
+        className,
+      )}
       style={{
         backgroundColor: hueColor,
       }}
