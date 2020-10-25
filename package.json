@@ -25,7 +25,8 @@
     "coverage": "jest --coverage"
   },
   "dependencies": {
-    "@super-effective/colorutils": "^1.0.1"
+    "@super-effective/colorutils": "^1.0.1",
+    "classnames": "^2.2.6"
   },
   "peerDependencies": {
     "prop-types": "^15.7.2",

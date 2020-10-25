@@ -1,0 +1,34 @@
+@use 'src/styles/variables' as *;
+
+.saturation_value_selector {
+  position: relative;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+
+  // Need to account for hue_slider_picker overflow
+  margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
+  margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000000 100%), linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
+  background-color: #ffffff;
+
+  .saturation_value_picker {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: $hsvPickerDiameter;
+    height: $hsvPickerDiameter;
+    box-sizing: border-box;
+
+    border: $pickerBorderWidth solid #ffffff;
+    box-shadow: $pickerBoxShadow;
+
+    border-radius: $hsvPickerDiameter / 2;
+
+    cursor: pointer;
+
+    transform: translate(-50%, -50%);
+  }
+}
