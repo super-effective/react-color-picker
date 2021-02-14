@@ -1,28 +1,35 @@
 /**
- * @typedef {Object} Event
- * @property {Object} target The target element of the event
+ * Saturation / Value of a color
+ * @property {number} saturation The saturation of a color
+ * @property {number} value The value of a color
  */
+export type SaturationValue = {
+  saturation: number,
+  value: number
+}
 
 /**
- * @typedef {Object} Element
- * @property {number} offsetLeft The left offset of the element
- * @property {number} offsetTop The top offset of the element
- * @property {Element} offsetParent The parent element the offset is relative to
- * @property {Element} parentElement The parent element
+ * Position on a page
+ * @property {number} left The left position on the page
+ * @property {number} top The top position on the page
  */
-
+export type PagePosition = {
+  left: number,
+  top: number
+}
 
 /**
  * Gets the page relative top/left position of an element
- * @param {Element} element The DOM element to get the page position of
+ * @param {HTMLElement} element The DOM element to get the page position of
+ * @returns {PagePosition} The position on the page
  */
-export function getPagePosition(element) {
+export function getPagePosition(element: HTMLElement): PagePosition {
   let left = element.offsetLeft;
   let top = element.offsetTop;
 
-  let currentElement = element;
+  let currentElement: HTMLElement = element;
   while (currentElement.offsetParent) {
-    currentElement = currentElement.offsetParent;
+    currentElement = currentElement.offsetParent as HTMLElement;
 
     left += currentElement.offsetLeft;
     top += currentElement.offsetTop;
@@ -36,9 +43,10 @@ export function getPagePosition(element) {
 
 /**
  * Sanitize and combine classNames to a single string
- * @param  {...string} classNames The classNames to combine
+ * @param  {string[]} classNames The classNames to combine
+ * @returns {string} The combined class names
  */
-export function getCombinedClassNames(...classNames) {
+export function getCombinedClassNames(...classNames: (string|null|boolean|object)[]): string {
   // Filter any null values
   const filteredClassnames = classNames.filter((className) => (
     typeof className === 'string' && className
@@ -52,8 +60,9 @@ export function getCombinedClassNames(...classNames) {
  * Get the hue value from a given position on the hue slider
  * @param {number} x The x coordinate on the hue slider
  * @param {number} width The width of the hue slider
+ * @returns {number} The hue based on the x position
  */
-export function getHueFromPosition(x, width) {
+export function getHueFromPosition(x: number, width: number): number {
   if (!width) {
     return 0;
   }
@@ -70,8 +79,9 @@ export function getHueFromPosition(x, width) {
  * @param {number} y The y coordinate on the SV selector
  * @param {number} width The width of the SV selector
  * @param {number} height The height of the SV selector
+ * @returns {SaturationValue} The saturation and value based on the position
  */
-export function getSaturationValueFromPosition(x, y, width, height) {
+export function getSaturationValueFromPosition(x: number, y: number, width: number, height: number): SaturationValue {
   const percentageX = (!width) ? 0 : x / width;
   const percentageY = (!height) ? 0 : 1 - (y / height);
 

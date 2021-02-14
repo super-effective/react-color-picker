@@ -5,8 +5,8 @@
     "jest": true
   },
   "extends": [
-    "airbnb-base",
     "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:react/recommended",
     "plugin:css-modules/recommended",
     "plugin:jsx-a11y/recommended"
@@ -15,7 +15,7 @@
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -24,44 +24,34 @@
     "sourceType": "module"
   },
   "plugins": [
+    "@typescript-eslint",
     "react",
     "css-modules"
   ],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
-    "import/no-extraneous-dependencies": [
-      "error", { "devDependencies": [
-          ".storybook/**",
-          "stories/**",
-          "**/*.stories.js"
-        ]
-      }
-    ],
-    "import/no-unresolved": ["error", {"caseSensitive": true }],
-
     "jsx-a11y/label-has-associated-control": ["error", { "required": { "some": ["nesting", "id"] }}],
 
     "max-len": ["warn", { "code": 120 }],
     "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "no-use-before-define": "off",
     "object-curly-newline": ["error", { "ImportDeclaration": { "minProperties": 6, "consistent": true } }],
     "react/jsx-indent": ["error", 2],
     "react/display-name": "off",
-    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
-    "react/jsx-props-no-spreading": "off",
-    "react/prop-types": ["error", { "ignore": [
-      "children",
-      "history",
-      "location",
-      "match"
-    ] }]
+    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/jsx-props-no-spreading": "off"
   },
   "settings": {
+    "css-modules": {
+      "basePath": "src"
+    },
     "import/resolver": {
       "node": {
         "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".scss"]
       }
     },
     "react": {

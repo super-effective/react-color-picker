@@ -1,11 +1,21 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { render, fireEvent, createEvent } from '@testing-library/react';
 
 import ReactColorPicker from './ReactColorPicker';
 
-class MockPointerEvent extends MouseEvent {}
+class MockPointerEvent extends MouseEvent {
+  width = 1;
+  height = 1;
+  isPrimary = true;
+  pointerId = 1;
+  pointerType = 'mouse';
+  pressure = 1;
+  tangentialPressure = 1;
+  tiltX = 0;
+  tiltY = 0;
+  twist = 0;
+}
 
 
 describe('ReactColorPicker - General', () => {
@@ -33,7 +43,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onInteractionStart).toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    // window.PointerEvent = null;
   });
 
   test('fires interaction start - saturation/value pointerdown', () => {
@@ -52,7 +62,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onInteractionStart).toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('does not fire interaction start - not targeted', () => {
@@ -66,7 +76,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onInteractionStart).not.toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('fires interaction end - pointerup', () => {
@@ -86,7 +96,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onInteractionEnd).toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('does not fire interaction start - not targeted', () => {
@@ -106,7 +116,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onInteractionStart).not.toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('color updates when setting hue - pointerdown', () => {
@@ -125,7 +135,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).toHaveBeenCalledWith('#ff0000');
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('color updates when setting hue - pointermove', () => {
@@ -145,7 +155,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).toHaveBeenCalledTimes(2);
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('does not update color when interaction was not started - hue pointermove', () => {
@@ -160,7 +170,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).not.toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('color updates when setting saturation/value - pointerdown', () => {
@@ -180,7 +190,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).toHaveBeenCalledWith('#000000');
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('color updates when setting saturation/value - pointermove', () => {
@@ -200,7 +210,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).toHaveBeenCalledTimes(2);
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 
   test('does not update color when interaction was not started - saturation/value pointermove', () => {
@@ -215,7 +225,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
     // Assert
     expect(onChange).not.toHaveBeenCalled();
-    window.PointerEvent = undefined;
+    (window as any).PointerEvent = undefined;
   });
 });
 
@@ -379,7 +389,8 @@ describe('ReactColorPicker - Hex Input', () => {
     rerender(<ReactColorPicker color={updatedHex}/>);
 
     // Assert
-    expect(getByLabelText('Hex:').value).toEqual(updatedHex);
+    const hexInput = getByLabelText('Hex:') as HTMLInputElement;
+    expect(hexInput.value).toEqual(updatedHex);
   });
 
   test('color updates when entering new hex and blur', () => {
@@ -414,7 +425,7 @@ describe('ReactColorPicker - Hex Input', () => {
     // Arrange
     const onChange = jest.fn();
     const { getByLabelText } = render(<ReactColorPicker color={originalHex} onChange={onChange} />);
-    const hexInput = getByLabelText('Hex:');
+    const hexInput = getByLabelText('Hex:') as HTMLInputElement;
 
     // Act
     fireEvent.change(hexInput, { target: { value: updatedHex } });
@@ -429,7 +440,7 @@ describe('ReactColorPicker - Hex Input', () => {
     // Arrange
     const onChange = jest.fn();
     const { getByLabelText } = render(<ReactColorPicker color={originalHex} onChange={onChange} />);
-    const hexInput = getByLabelText('Hex:');
+    const hexInput = getByLabelText('Hex:') as HTMLInputElement;
 
     // Act
     fireEvent.change(hexInput, { target: { value: updatedHex } });
@@ -444,7 +455,7 @@ describe('ReactColorPicker - Hex Input', () => {
     // Arrange
     const onChange = jest.fn();
     const { getByLabelText } = render(<ReactColorPicker color={originalHex} onChange={onChange} />);
-    const hexInput = getByLabelText('Hex:');
+    const hexInput = getByLabelText('Hex:') as HTMLInputElement;
 
     // Act
     fireEvent.keyDown(hexInput, { key: 'A' });
@@ -460,7 +471,7 @@ describe('ReactColorPicker - Properties', () => {
     // Arrange
     // Act
     const { getByLabelText } = render(<ReactColorPicker color={null} />);
-    const hexInput = getByLabelText('Hex:');
+    const hexInput = getByLabelText('Hex:') as HTMLInputElement;
 
     // Assert
     expect(hexInput.value).toEqual('#000000');
@@ -494,6 +505,7 @@ describe('ReactColorPicker - Properties', () => {
     const { container } = render(<ReactColorPicker className={testClassName} showSwatch={false} />);
 
     // Assert
-    expect(container.firstChild.classList.contains(testClassName)).toBe(true);
+    const containerElement = container.firstChild! as HTMLDivElement;
+    expect(containerElement.classList.contains(testClassName)).toBe(true);
   });
 });

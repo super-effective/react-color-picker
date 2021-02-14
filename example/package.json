@@ -4,17 +4,17 @@
   "license": "MIT",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ../node_modules/react-scripts/bin/react-scripts.js start",
-    "build": "node ../node_modules/react-scripts/bin/react-scripts.js build",
-    "test": "node ../node_modules/react-scripts/bin/react-scripts.js test",
-    "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
+    "start": "node ./node_modules/react-scripts/bin/react-scripts.js start",
+    "build": "node ./node_modules/react-scripts/bin/react-scripts.js build",
+    "test": "node ./node_modules/react-scripts/bin/react-scripts.js test",
+    "eject": "node ./node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@super-effective/colorutils": "^1.1.1",
+    "@super-effective/colorutils": "^2.0.1",
     "@super-effective/react-color-picker": "link:..",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-scripts": "link:../node_modules/react-scripts"
+    "react-scripts": "^4.0.2"
   },
   "browserslist": {
     "production": [

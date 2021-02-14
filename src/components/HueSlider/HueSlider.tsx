@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { hsvToHex } from '@super-effective/colorutils';
 import React, { useCallback, useRef, useState } from 'react';
 
@@ -10,21 +9,35 @@ import {
 
 import styles from './HueSlider.module.scss';
 
+type HueSliderProps = {
+  className?: string
+  hue: number;
+  layout?: 'HORIZONTAL' | 'HORIZONTAL';
+
+  onChange: (hue: number) => void;
+  onInteractionStart: () => void;
+  onInteractionEnd: () => void;
+};
+
 const HueSlider = ({
   className,
   hue,
-  layout,
+  layout = 'HORIZONTAL',
 
   onChange,
-  onInteractionStart,
-  onInteractionEnd,
-}) => {
+  onInteractionStart = () => {},
+  onInteractionEnd = () => {},
+}: HueSliderProps) => {
   const [isInteracting, setIsInteracting] = useState(false);
-  const sliderDivRef = useRef();
+  const sliderDivRef = useRef<HTMLDivElement>(null);
 
   const hueColor = hsvToHex(hue, 1, 1);
 
   const updateHue = useCallback((evt) => {
+    if (!sliderDivRef.current) {
+      return;
+    }
+
     const huePosition = getPagePosition(sliderDivRef.current);
 
     switch (layout) {
@@ -122,23 +135,6 @@ const HueSlider = ({
 HueSlider.LAYOUTS = {
   HORIZONTAL: 'HORIZONTAL',
   VERTICAL: 'VERTICAL',
-};
-
-HueSlider.propTypes = {
-  className: PropTypes.string,
-  hue: PropTypes.number.isRequired,
-  layout: PropTypes.oneOf(Object.values(HueSlider.LAYOUTS)),
-
-  onChange: PropTypes.func.isRequired,
-  onInteractionStart: PropTypes.func,
-  onInteractionEnd: PropTypes.func,
-};
-
-HueSlider.defaultProps = {
-  className: null,
-  layout: HueSlider.LAYOUTS.HORIZONTAL,
-  onInteractionStart: () => {},
-  onInteractionEnd: () => {},
 };
 
 export default HueSlider;
