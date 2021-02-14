@@ -1,6 +1,6 @@
 {
   "name": "@super-effective/react-color-picker",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "React Color Picker",
   "keywords": [
     "react",
@@ -31,8 +31,8 @@
     "classnames": "^2.2.6"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

@@ -9,39 +9,6 @@ export type SaturationValue = {
 }
 
 /**
- * Position on a page
- * @property {number} left The left position on the page
- * @property {number} top The top position on the page
- */
-export type PagePosition = {
-  left: number,
-  top: number
-}
-
-/**
- * Gets the page relative top/left position of an element
- * @param {HTMLElement} element The DOM element to get the page position of
- * @returns {PagePosition} The position on the page
- */
-export function getPagePosition(element: HTMLElement): PagePosition {
-  let left = element.offsetLeft;
-  let top = element.offsetTop;
-
-  let currentElement: HTMLElement = element;
-  while (currentElement.offsetParent) {
-    currentElement = currentElement.offsetParent as HTMLElement;
-
-    left += currentElement.offsetLeft;
-    top += currentElement.offsetTop;
-  }
-
-  return {
-    left,
-    top,
-  };
-}
-
-/**
  * Sanitize and combine classNames to a single string
  * @param  {string[]} classNames The classNames to combine
  * @returns {string} The combined class names
