@@ -3,7 +3,6 @@ import { hsvToHex } from '@super-effective/colorutils';
 import React, { useCallback, useRef, useState } from 'react';
 
 import {
-  getPagePosition,
   getSaturationValueFromPosition,
   SaturationValue,
 } from 'common/util';
@@ -37,14 +36,16 @@ const SaturationValueSelector = ({
   const hueColor = hsvToHex(hue, 1, 1);
   const hex = hsvToHex(hue, saturation, value);
 
-  const updateSaturationValue = useCallback((evt) => {
+  const updateSaturationValue = useCallback((
+      evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>
+  ) => {
     if (!selectorDivRef.current) {
       return;
     }
 
-    const svPosition = getPagePosition(selectorDivRef.current);
-    const x = evt.pageX - svPosition.left;
-    const y = evt.pageY - svPosition.top;
+    const svPosition = selectorDivRef.current.getBoundingClientRect();
+    const x = evt.clientX - svPosition.left;
+    const y = evt.clientY - svPosition.top;
 
     const updatedSaturationValue = getSaturationValueFromPosition(
       x,
@@ -56,32 +57,32 @@ const SaturationValueSelector = ({
     onChange(updatedSaturationValue);
   }, []);
 
-  const onPointerDown = useCallback((evt) => {
-    evt.target.setPointerCapture(evt.pointerId);
+  const onPointerDown = useCallback((evt: React.PointerEvent<Element>): void => {
+    (evt.target! as HTMLElement).setPointerCapture(evt.pointerId);
     onInteractionStart();
     setIsInteracting(true);
     updateSaturationValue(evt);
   }, []);
 
-  const onPointerUp = useCallback((evt) => {
-    evt.target.releasePointerCapture(evt.pointerId);
+  const onPointerUp = useCallback((evt: React.PointerEvent<Element>): void => {
+    (evt.target! as HTMLElement).releasePointerCapture(evt.pointerId);
     onInteractionEnd();
     setIsInteracting(false);
   }, []);
 
-  const onMouseDown = useCallback((evt) => {
+  const onMouseDown = useCallback((evt: React.MouseEvent<Element, MouseEvent>): void => {
     onInteractionStart();
     setIsInteracting(true);
     updateSaturationValue(evt);
   }, []);
 
-  const onMove = useCallback((evt) => {
+  const onMove = useCallback((evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>): void => {
     if (isInteracting) {
       updateSaturationValue(evt);
     }
   }, [isInteracting]);
 
-  const onMouseUp = useCallback(() => {
+  const onMouseUp = useCallback((): void => {
     onInteractionEnd();
     setIsInteracting(false);
   }, []);

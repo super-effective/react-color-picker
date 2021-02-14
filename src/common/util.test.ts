@@ -1,62 +1,8 @@
 import {
-  getPagePosition,
   getCombinedClassNames,
   getHueFromPosition,
   getSaturationValueFromPosition,
 } from './util';
-
-
-const parentElement = {
-  offsetLeft: 1,
-  offsetTop: 1,
-  offsetParent: null,
-  parentElement: null,
-} as HTMLElement;
-
-const firstChildElement = {
-  offsetLeft: 3,
-  offsetTop: 3,
-  offsetParent: parentElement as Element,
-  parentElement,
-} as HTMLElement;
-
-const secondChildElement = {
-  offsetLeft: 5,
-  offsetTop: 5,
-  offsetParent: firstChildElement as Element,
-  parentElement: firstChildElement as Element,
-} as HTMLElement;
-
-
-/**
- * getPagePosition
- */
-describe('getPagePosition', () => {
-  test('getPagePosition', () => {
-    // Arrange
-    // Act
-    const pagePosition = getPagePosition(secondChildElement);
-
-    // Assert
-    expect(pagePosition).toStrictEqual({
-      left: 9,
-      top: 9,
-    });
-  });
-
-  test('getPagePosition - no parent', () => {
-    // Arrange
-    // Act
-    const pagePosition = getPagePosition(parentElement);
-
-    // Assert
-    expect(pagePosition).toStrictEqual({
-      left: 1,
-      top: 1,
-    });
-  });
-});
-
 
 /**
  * getCombinedClassNames

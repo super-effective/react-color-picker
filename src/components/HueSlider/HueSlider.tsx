@@ -4,7 +4,6 @@ import React, { useCallback, useRef, useState } from 'react';
 
 import {
   getHueFromPosition,
-  getPagePosition,
 } from 'common/util';
 
 import styles from './HueSlider.module.scss';
@@ -33,48 +32,50 @@ const HueSlider = ({
 
   const hueColor = hsvToHex(hue, 1, 1);
 
-  const updateHue = useCallback((evt) => {
+  const updateHue = useCallback((
+    evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>
+  ) => {
     if (!sliderDivRef.current) {
       return;
     }
 
-    const huePosition = getPagePosition(sliderDivRef.current);
+    const huePosition = sliderDivRef.current.getBoundingClientRect();
 
     switch (layout) {
       case HueSlider.LAYOUTS.VERTICAL: {
-        const y = evt.pageY - huePosition.top;
+        const y = evt.clientY - huePosition.top;
         const updatedHue = getHueFromPosition(y, sliderDivRef.current.clientHeight);
         onChange(updatedHue);
         break;
       }
       default: {
-        const x = evt.pageX - huePosition.left;
+        const x = evt.clientX - huePosition.left;
         const updatedHue = getHueFromPosition(x, sliderDivRef.current.clientWidth);
         onChange(updatedHue);
       }
     }
   }, []);
 
-  const onPointerDown = useCallback((evt) => {
-    evt.target.setPointerCapture(evt.pointerId);
+  const onPointerDown = useCallback((evt: React.PointerEvent<Element>): void => {
+    (evt.target! as HTMLElement).setPointerCapture(evt.pointerId);
     onInteractionStart();
     setIsInteracting(true);
     updateHue(evt);
   }, []);
 
-  const onPointerUp = useCallback((evt) => {
-    evt.target.releasePointerCapture(evt.pointerId);
+  const onPointerUp = useCallback((evt: React.PointerEvent<Element>): void => {
+    (evt.target! as HTMLElement).releasePointerCapture(evt.pointerId);
     onInteractionEnd();
     setIsInteracting(false);
   }, []);
 
-  const onMouseDown = useCallback((evt) => {
+  const onMouseDown = useCallback((evt: React.MouseEvent<Element, MouseEvent>): void => {
     onInteractionStart();
     setIsInteracting(true);
     updateHue(evt);
   }, []);
 
-  const onMove = useCallback((evt) => {
+  const onMove = useCallback((evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>): void => {
     if (isInteracting) {
       updateHue(evt);
     }
