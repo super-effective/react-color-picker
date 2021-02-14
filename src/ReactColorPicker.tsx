@@ -1,27 +1,37 @@
 import React, { useEffect, useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { hsvToHex, hexToHsv, sanitizeHex } from '@super-effective/colorutils';
+import { hsvToHex, hexToHsv, sanitizeHex, Hsv } from '@super-effective/colorutils';
 
 import HueSlider from 'components/HueSlider';
 import SaturationValueSelector from 'components/SaturationValueSelector';
 
 import styles from './ReactColorPicker.module.scss';
 
-const ReactColorPicker = ({
-  className,
-  color,
-  showHex,
-  showSwatch,
+type ReactColorPickerProps = {
+  className?: string | null;
+  color?: string | null;
+  showHex?: boolean;
+  showSwatch?: boolean;
 
-  onChange,
-  onInteractionStart,
-  onInteractionEnd,
+  onChange?: (hex: string) => void;
+  onInteractionStart?: () => void;
+  onInteractionEnd?: () => void;
+};
+
+const ReactColorPicker = ({
+  className = null,
+  color = '#3cd6bf',
+  showHex = true,
+  showSwatch = true,
+
+  onChange = () => {},
+  onInteractionStart = () => {},
+  onInteractionEnd = () => {},
 
   ...rest
-}) => {
+}: ReactColorPickerProps) => {
   const sanitizedColor = sanitizeHex(color || '#000000');
 
-  const [hex, setHex] = useState(sanitizedColor);
+  const [hex, setHex] = useState<string>(sanitizedColor);
   const [hsv, setHsv] = useState(hexToHsv(sanitizedColor));
   const [isInteracting, setIsInteracting] = useState(false);
 
@@ -32,7 +42,7 @@ const ReactColorPicker = ({
   const hexRef = useRef(hex);
 
   // Set the hex and hsv states/refs with updated data
-  const setColor = (updatedHex, updatedHsv) => {
+  const setColor = (updatedHex: string, updatedHsv: Hsv) => {
     hexRef.current = updatedHex;
     hsvRef.current = updatedHsv;
 
@@ -44,13 +54,13 @@ const ReactColorPicker = ({
   };
 
   // Helper to set the color when HSV change
-  const setColorFromHsv = (updatedHsv) => setColor(
+  const setColorFromHsv = (updatedHsv: Hsv) => setColor(
     hsvToHex(updatedHsv.hue, updatedHsv.saturation, updatedHsv.value),
     updatedHsv,
   );
 
   // Helper to set the color when hex changes
-  const setColorFromHex = (updatedHex) => setColor(updatedHex, hexToHsv(updatedHex));
+  const setColorFromHex = (updatedHex: string) => setColor(updatedHex, hexToHsv(updatedHex));
 
   const onControlInteractionStart = () => {
     setIsInteracting(true);
@@ -64,7 +74,7 @@ const ReactColorPicker = ({
 
 
   // Event handler for hex input changes (on blur and enter pressed)
-  const onHexChange = (value) => {
+  const onHexChange = (value: string) => {
     // Strip out invalid characters
     const sanitizedHex = sanitizeHex(value);
 
@@ -135,12 +145,13 @@ const ReactColorPicker = ({
                 onChange={(evt) => setTempHex(evt.target.value)}
                 onBlur={(evt) => onHexChange(evt.target.value)}
                 onKeyDown={(evt) => {
+                  const inputTarget = evt.target as HTMLInputElement;
                   if (evt.key === 'Enter') {
-                    onHexChange(evt.target.value);
+                    onHexChange(inputTarget.value);
                   } else if (evt.key === 'Esc' || evt.key === 'Escape') {
                     // eslint-disable-next-line no-param-reassign
-                    evt.target.value = hexRef.current;
-                    evt.target.blur();
+                    inputTarget.value = hexRef.current;
+                    inputTarget.blur();
                   }
                 }}
               />
@@ -150,28 +161,6 @@ const ReactColorPicker = ({
       )}
     </div>
   );
-};
-
-ReactColorPicker.propTypes = {
-  className: PropTypes.string,
-  color: PropTypes.string,
-  showSwatch: PropTypes.bool,
-  showHex: PropTypes.bool,
-
-  onChange: PropTypes.func,
-  onInteractionStart: PropTypes.func,
-  onInteractionEnd: PropTypes.func,
-};
-
-ReactColorPicker.defaultProps = {
-  className: null,
-  color: '#3cd6bf',
-  showSwatch: true,
-  showHex: true,
-
-  onChange: () => {},
-  onInteractionStart: () => {},
-  onInteractionEnd: () => {},
 };
 
 export default ReactColorPicker;

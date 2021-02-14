@@ -1,14 +1,25 @@
 import classNames from 'classnames';
-import PropTypes from 'prop-types';
 import { hsvToHex } from '@super-effective/colorutils';
 import React, { useCallback, useRef, useState } from 'react';
 
 import {
   getPagePosition,
   getSaturationValueFromPosition,
+  SaturationValue,
 } from 'common/util';
 
 import styles from './SaturationValueSelector.module.scss';
+
+type SaturationValueSelectorProps = {
+  className?: string;
+  hue: number;
+  saturation: number;
+  value: number;
+
+  onChange: (saturationValue: SaturationValue) => void;
+  onInteractionStart?: () => void;
+  onInteractionEnd?: () => void;
+};
 
 const SaturationValueSelector = ({
   className,
@@ -17,16 +28,20 @@ const SaturationValueSelector = ({
   value,
 
   onChange,
-  onInteractionStart,
-  onInteractionEnd,
-}) => {
+  onInteractionStart = () => {},
+  onInteractionEnd = () => {},
+}: SaturationValueSelectorProps) => {
   const [isInteracting, setIsInteracting] = useState(false);
-  const selectorDivRef = useRef();
+  const selectorDivRef = useRef<HTMLDivElement>(null);
 
   const hueColor = hsvToHex(hue, 1, 1);
   const hex = hsvToHex(hue, saturation, value);
 
   const updateSaturationValue = useCallback((evt) => {
+    if (!selectorDivRef.current) {
+      return;
+    }
+
     const svPosition = getPagePosition(selectorDivRef.current);
     const x = evt.pageX - svPosition.left;
     const y = evt.pageY - svPosition.top;
@@ -112,23 +127,6 @@ const SaturationValueSelector = ({
       />
     </div>
   );
-};
-
-SaturationValueSelector.propTypes = {
-  className: PropTypes.string,
-  hue: PropTypes.number.isRequired,
-  saturation: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-
-  onChange: PropTypes.func.isRequired,
-  onInteractionStart: PropTypes.func,
-  onInteractionEnd: PropTypes.func,
-};
-
-SaturationValueSelector.defaultProps = {
-  className: null,
-  onInteractionStart: () => {},
-  onInteractionEnd: () => {},
 };
 
 export default SaturationValueSelector;

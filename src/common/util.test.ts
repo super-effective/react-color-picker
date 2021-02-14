@@ -11,21 +11,21 @@ const parentElement = {
   offsetTop: 1,
   offsetParent: null,
   parentElement: null,
-};
+} as HTMLElement;
 
 const firstChildElement = {
   offsetLeft: 3,
   offsetTop: 3,
-  offsetParent: parentElement,
+  offsetParent: parentElement as Element,
   parentElement,
-};
+} as HTMLElement;
 
 const secondChildElement = {
   offsetLeft: 5,
   offsetTop: 5,
-  offsetParent: firstChildElement,
-  parentElement: firstChildElement,
-};
+  offsetParent: firstChildElement as Element,
+  parentElement: firstChildElement as Element,
+} as HTMLElement;
 
 
 /**
