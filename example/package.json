@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.10.3",
+    "@babel/core": "^7.12.16",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   }
 }
