@@ -54,37 +54,37 @@ const HueSlider = ({
         onChange(updatedHue);
       }
     }
-  }, []);
+  }, [onChange]);
 
   const onPointerDown = useCallback((evt: React.PointerEvent<Element>): void => {
     (evt.target! as HTMLElement).setPointerCapture(evt.pointerId);
     onInteractionStart();
     setIsInteracting(true);
     updateHue(evt);
-  }, []);
+  }, [onInteractionStart, updateHue]);
 
   const onPointerUp = useCallback((evt: React.PointerEvent<Element>): void => {
     (evt.target! as HTMLElement).releasePointerCapture(evt.pointerId);
     onInteractionEnd();
     setIsInteracting(false);
-  }, []);
+  }, [onInteractionEnd]);
 
   const onMouseDown = useCallback((evt: React.MouseEvent<Element, MouseEvent>): void => {
     onInteractionStart();
     setIsInteracting(true);
     updateHue(evt);
-  }, []);
+  }, [onInteractionStart, updateHue]);
 
   const onMove = useCallback((evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>): void => {
     if (isInteracting) {
       updateHue(evt);
     }
-  }, [isInteracting]);
+  }, [isInteracting, updateHue]);
 
   const onMouseUp = useCallback(() => {
     onInteractionEnd();
     setIsInteracting(false);
-  }, []);
+  }, [onInteractionEnd]);
 
 
   // Setup pointer events for supported browsers for two reasons:
