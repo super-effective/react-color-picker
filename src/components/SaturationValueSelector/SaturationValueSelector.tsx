@@ -55,37 +55,37 @@ const SaturationValueSelector = ({
     );
 
     onChange(updatedSaturationValue);
-  }, []);
+  }, [onChange]);
 
   const onPointerDown = useCallback((evt: React.PointerEvent<Element>): void => {
     (evt.target! as HTMLElement).setPointerCapture(evt.pointerId);
     onInteractionStart();
     setIsInteracting(true);
     updateSaturationValue(evt);
-  }, []);
+  }, [onInteractionStart, updateSaturationValue]);
 
   const onPointerUp = useCallback((evt: React.PointerEvent<Element>): void => {
     (evt.target! as HTMLElement).releasePointerCapture(evt.pointerId);
     onInteractionEnd();
     setIsInteracting(false);
-  }, []);
+  }, [onInteractionEnd]);
 
   const onMouseDown = useCallback((evt: React.MouseEvent<Element, MouseEvent>): void => {
     onInteractionStart();
     setIsInteracting(true);
     updateSaturationValue(evt);
-  }, []);
+  }, [onInteractionStart, updateSaturationValue]);
 
   const onMove = useCallback((evt: React.MouseEvent<Element, MouseEvent> | React.PointerEvent<Element>): void => {
     if (isInteracting) {
       updateSaturationValue(evt);
     }
-  }, [isInteracting]);
+  }, [isInteracting, updateSaturationValue]);
 
   const onMouseUp = useCallback((): void => {
     onInteractionEnd();
     setIsInteracting(false);
-  }, []);
+  }, [onInteractionEnd]);
 
 
   // Setup pointer events for supported browsers for two reasons:
