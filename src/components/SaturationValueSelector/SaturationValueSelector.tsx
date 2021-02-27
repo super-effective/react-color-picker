@@ -11,6 +11,7 @@ import styles from './SaturationValueSelector.module.scss';
 
 type SaturationValueSelectorProps = {
   className?: string;
+  pickerClassName?: string;
   hue: number;
   saturation: number;
   value: number;
@@ -22,6 +23,7 @@ type SaturationValueSelectorProps = {
 
 const SaturationValueSelector = ({
   className,
+  pickerClassName,
   hue,
   saturation,
   value,
@@ -119,7 +121,7 @@ const SaturationValueSelector = ({
       {...interactionCallbacks}
     >
       <div
-        className={styles.saturation_value_picker}
+        className={classNames(styles.saturation_value_picker, pickerClassName)}
         style={{
           left: `${saturation * 100}%`,
           top: `${(1 - value) * 100}%`,

@@ -9,6 +9,10 @@ import styles from './ReactColorPicker.module.scss';
 type ReactColorPickerProps = {
   className?: string | null;
   color?: string | null;
+  hueClassName?: string;
+  huePickerClassName?: string;
+  saturationValueClassName?: string;
+  saturationValuePickerClassName?: string;
   showHex?: boolean;
   showSwatch?: boolean;
 
@@ -20,6 +24,10 @@ type ReactColorPickerProps = {
 const ReactColorPicker = ({
   className = null,
   color = '#3cd6bf',
+  hueClassName,
+  huePickerClassName,
+  saturationValueClassName,
+  saturationValuePickerClassName,
   showHex = true,
   showSwatch = true,
 
@@ -102,6 +110,8 @@ const ReactColorPicker = ({
     >
       <div className={styles.saturation_value_selector}>
         <SaturationValueSelector
+          className={saturationValueClassName}
+          pickerClassName={saturationValuePickerClassName}
           hue={hue}
           saturation={saturation}
           value={value}
@@ -116,6 +126,8 @@ const ReactColorPicker = ({
       </div>
 
       <HueSlider
+        className={hueClassName}
+        pickerClassName={huePickerClassName}
         hue={hue}
         onChange={(updatedHue) => setColorFromHsv({
           ...hsvRef.current,

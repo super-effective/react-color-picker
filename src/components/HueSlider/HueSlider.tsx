@@ -9,7 +9,8 @@ import {
 import styles from './HueSlider.module.scss';
 
 type HueSliderProps = {
-  className?: string
+  className?: string;
+  pickerClassName?: string;
   hue: number;
   layout?: 'HORIZONTAL' | 'HORIZONTAL';
 
@@ -20,6 +21,7 @@ type HueSliderProps = {
 
 const HueSlider = ({
   className,
+  pickerClassName,
   hue,
   layout = 'HORIZONTAL',
 
@@ -126,7 +128,7 @@ const HueSlider = ({
         {...interactionCallbacks}
     >
       <div
-        className={styles.hue_slider_picker}
+        className={classNames(styles.hue_slider_picker, pickerClassName)}
         style={sliderStyle}
       />
     </div>
