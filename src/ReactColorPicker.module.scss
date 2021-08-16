@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use 'src/styles/variables' as *;
 
 .react_color_picker {
@@ -18,8 +19,8 @@
     margin-top: 10px;
 
     // Need to account for hue_slider_picker overflow
-    margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
-    margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+    margin-left: math.div($huePickerWidth, 2) + $pickerBorderWidth;
+    margin-right: math.div($huePickerWidth, 2) + $pickerBorderWidth;
 
     .swatch {
       width: 32px;

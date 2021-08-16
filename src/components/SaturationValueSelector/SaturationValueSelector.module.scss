@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use 'src/styles/variables' as *;
 
 .saturation_value_selector {
@@ -7,8 +8,8 @@
   overflow: hidden;
 
   // Need to account for hue_slider_picker overflow
-  margin-left: $huePickerWidth / 2 + $pickerBorderWidth;
-  margin-right: $huePickerWidth / 2 + $pickerBorderWidth;
+  margin-left: math.div($huePickerWidth, 2) + $pickerBorderWidth;
+  margin-right: math.div($huePickerWidth, 2) + $pickerBorderWidth;
 
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000000 100%), linear-gradient(to left, rgba(255, 255, 255, 0) 0%, #ffffff 100%);
   background-color: #ffffff;
@@ -25,7 +26,7 @@
     border: $pickerBorderWidth solid #ffffff;
     box-shadow: $pickerBoxShadow;
 
-    border-radius: $hsvPickerDiameter / 2;
+    border-radius: math.div($hsvPickerDiameter, 2);
 
     cursor: pointer;
 
