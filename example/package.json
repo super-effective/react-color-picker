@@ -10,11 +10,11 @@
     "eject": "node ./node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@super-effective/colorutils": "^2.1.0",
+    "@super-effective/colorutils": "^2.1.1",
     "@super-effective/react-color-picker": "link:..",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^5.0.1"
   },
   "browserslist": {
     "production": [
@@ -29,7 +29,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "^7.13.13",
+    "@babel/core": "^7.18.2",
     "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
   }
 }

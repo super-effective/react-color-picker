@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { render, fireEvent, createEvent } from '@testing-library/react';
 
 import ReactColorPicker from './ReactColorPicker';
 
-class MockPointerEvent extends MouseEvent {
+class MockPointerEvent extends window.MouseEvent {
   width = 1;
   height = 1;
   isPrimary = true;
@@ -20,16 +19,14 @@ class MockPointerEvent extends MouseEvent {
 
 describe('ReactColorPicker - General', () => {
   test('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<ReactColorPicker />, div);
-    ReactDOM.unmountComponentAtNode(div);
+    render(<ReactColorPicker />);
   });
 });
 
 describe('ReactColorPicker - Pointer Events', () => {
   test('fires interaction start - hue pointerdown', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onInteractionStart = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
     const hueDiv = getByTitle('Hue');
@@ -48,7 +45,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('fires interaction start - saturation/value pointerdown', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onInteractionStart = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
     const svDiv = getByTitle('Saturation and Value');
@@ -66,7 +63,7 @@ describe('ReactColorPicker - Pointer Events', () => {
   });
 
   test('does not fire interaction start - not targeted', () => {
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     // Arrange
     const onInteractionStart = jest.fn();
     render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
@@ -81,7 +78,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('fires interaction end - pointerup', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onInteractionEnd = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionEnd={onInteractionEnd} />);
     const svDiv = getByTitle('Saturation and Value');
@@ -101,7 +98,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('does not fire interaction start - not targeted', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onInteractionStart = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onInteractionStart={onInteractionStart} />);
     const svDiv = getByTitle('Saturation and Value');
@@ -121,7 +118,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('color updates when setting hue - pointerdown', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const hueDiv = getByTitle('Hue');
@@ -140,7 +137,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('color updates when setting hue - pointermove', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const hueDiv = getByTitle('Hue');
@@ -160,7 +157,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('does not update color when interaction was not started - hue pointermove', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const hueDiv = getByTitle('Hue');
@@ -175,7 +172,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('color updates when setting saturation/value - pointerdown', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const svDiv = getByTitle('Saturation and Value');
@@ -195,7 +192,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('color updates when setting saturation/value - pointermove', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const svDiv = getByTitle('Saturation and Value');
@@ -215,7 +212,7 @@ describe('ReactColorPicker - Pointer Events', () => {
 
   test('does not update color when interaction was not started - saturation/value pointermove', () => {
     // Arrange
-    window.PointerEvent = MockPointerEvent;
+    window.PointerEvent = MockPointerEvent as any;
     const onChange = jest.fn();
     const { getByTitle } = render(<ReactColorPicker color="#00ff00" onChange={onChange} />);
     const svDiv = getByTitle('Saturation and Value');
