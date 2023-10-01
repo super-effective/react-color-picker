@@ -7,7 +7,6 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:react/recommended",
     "plugin:css-modules/recommended",
     "plugin:jsx-a11y/recommended"
   ],
@@ -25,7 +24,6 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "react",
     "css-modules"
   ],
   "rules": {
@@ -39,9 +37,8 @@
     "@typescript-eslint/no-unused-vars": ["error"],
     "no-use-before-define": "off",
     "object-curly-newline": ["error", { "ImportDeclaration": { "minProperties": 6, "consistent": true } }],
-    "react/jsx-indent": ["error", 2],
+    "react/react-in-jsx-scope": "off",
     "react/display-name": "off",
-    "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
     "react/jsx-props-no-spreading": "off"
   },
   "settings": {
